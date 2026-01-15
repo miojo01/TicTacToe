@@ -18,6 +18,9 @@ function calculateWinner(squares) {
 }
 
 function Game() {
+    const [scoreX, setScoreX] = useState(0);
+    const [scoreO, setScoreO] = useState(0);
+
     const [squares, setSquares] = useState(Array(9).fill(null));
 
     const [xIsNext, setXIsNext] = useState(true);
@@ -44,9 +47,16 @@ function Game() {
         const nextSquares = [...squares]
         nextSquares[i] = xIsNext ? 'X' : 'O';
         setSquares(nextSquares);
+        if (calculateWinner(nextSquares) === 'X') {
+            setScoreX(scoreX + 1);
+        }
+        else if (calculateWinner(nextSquares) === 'O') {
+            setScoreO(scoreO + 1);
+        }
         setXIsNext(!xIsNext);
         console.log(nextSquares)
     }
+
     function resetGame(){
         setSquares(Array(9).fill(null));
         setXIsNext(true);
@@ -55,6 +65,7 @@ function Game() {
   return (
     <div className='game'>
         <h1 className="title">Jogo da Velha</h1>
+        <div className="status">Placar X = {scoreX} | Placar O = {scoreO}</div>
         <div className={winner ? "status winner" : "status"}>{status}</div>
         <div className="board">
             <div className="row">{[0,1,2].map((i)=><Square value={squares[i]} onClick={()=>handleSquareClick(i)} key={i}/>)}</div>
